@@ -469,9 +469,21 @@ f_obj.close()
 ```
 這樣的好處我想應該是可以節省資料的儲存空間
 
-## Object Concept
+## Class and Object
+### Basic Class Prototype
+```python=
+class ClassName:
+    def __init__(self, args):
+        # Initialize data members
+        self._protect_data   # Single underline
+        self.__private_data  # Double underline
+    def func(self):
+        # Define member function
+    def __private_func(self):
+        pass
+```
 
-## String 
+## String
 
 ## Exception Handling
 
@@ -545,9 +557,9 @@ b = []
 for x in a:
     b.append(x) or b.insert(len(b), x)
 # Better Way
-b = a.copy()
-b = [] + a
-b = [x for x in a]
+b = a.copy()        # Use list copy function
+b = [] + a          # Use list concatenation
+b = [x for x in a]  # Use list comprehension
 
 
 # Try & Test & Think
@@ -634,3 +646,64 @@ aList = list( range(1,4) )
 > 3. Can't insert value to the tuple and remove value from the tuple
 
 ### Dictionary
+> 1. 使用key-value的方式儲存資料
+> 2. 如同C++ hash map
+> 3. key-value可以為任意型別
+
+#### Dictionary Function
+- `dict(mapping)`:
+    - Return the dict of mapping
+    - EX:`dict([('one', 1) ,('two', 2)]) -->  {'one': 1, 'two': 2}`
+- `dict(**kwargs)`:
+    - EX:`dict(k1='A', k2='B')  -->  {'k1': 'A', 'k2': 'B'}`
+- `[]`:
+    - Add the value to the key
+    - EX: `dict_obj[key] = value`
+    - Get the value of the key
+    - EX: `var = dict_obj[key]`
+    - If no key, raise KeyError
+- `dict.update(**kwargs or dict_obj)`
+    - Add the value to the original dict_obj
+- `dict.clear()`
+    - Remove all elems in the dict
+- `dict.copy()`
+    - Return the copy of the dict
+ - `dict.get(key, default=None)`
+     - Return the value of the key
+     - If no key, return default
+     - EX:`dict.get(fun, lambda:print('no fun'))()`
+ - `dict.keys()`
+     - Return a list of the key in dict
+ - `dict.values()`
+     - Return a list of the value in dict
+ - `dict.items()`
+     - Return a list of the key-value pair in dict
+ - `dict.pop(key, [default])`
+     - Return the value of the key, and pop the key from the dict
+     - If key isn't exist, return default
+     - If no default , raise KeyError
+ - `dict.__contain__(key)`
+     - Return True if key in the dict
+     - EX:`True if key in dict else False`
+
+#### Dictionary Example
+```python=
+# dict example with sorted and lambda
+dic = {'Mary' : 50, 'Bob': 30, 'Cindy' : 80, 'John' : 100, 'Can' : 10}
+
+# Sort by key
+sort_by_key = sorted(dic.items(), key = lambda x:x[0])
+## sort_by_key =
+## [('Bob', 30), ('Can', 10), ('Cindy', 80), ('John', 100), ('Mary', 50)]
+
+# Sort by value
+sort_by_val = sorted(dic.items(), key = lambda x:x[1])
+## sort_by_val =
+## [('Can', 10), ('Bob', 30), ('Mary', 50), ('Cindy', 80), ('John', 100)]
+
+
+# Sort with the second word of name and reverse
+sort_ch = sorted(dic.items(), key = lambda x:x[0][1], reverse = True)
+## sort_ch =
+## [('Bob', 30), ('John', 100), ('Cindy', 80), ('Mary', 50), ('Can', 10)]
+```
