@@ -852,3 +852,139 @@ sort_ch = sorted(dic.items(), key = lambda x:x[0][1], reverse = True)
 ## sort_ch =
 ## [('Bob', 30), ('John', 100), ('Cindy', 80), ('Mary', 50), ('Can', 10)]
 ```
+
+## Module -- JSON
+> Library: json
+
+常用函式:
+1. `dump(obj, fp)`
+    - Python物件轉換成JSON格式字串，並寫入檔案
+2. `loda(fp)`
+    - 從檔案讀取JSON，並轉換成Python物件
+3. `dumps(obj)`
+    - 注意s，將Python物件轉換成JSON格式字串
+    - 選用參數(有很多，僅列出我用過的)
+        - skipkeys
+            - default = False
+            - True，略過非Python基本型態的key值，(Python基本型態：str、int、float、bool、None)
+            - False 遇到非Python基本型態的key值，產生TypeError
+        - sort_keys
+            - default = False
+            - 按照資料key值排序
+        - separators
+            - default = None
+            - If None 預設字典顯示，為`( ' , ' , ' : ' )`，代表每對pair之間用逗點隔開，key與value之間用冒號隔開
+            - EX：`json.dumps( { 1 : 'Mary', 2: 'Jack' },  separators=(" | ", " = ") )`
+                - Output：`'{"1" = "Mary" | "2" = "Jack"}'`
+    4. `loads(str)`
+        - 注意s, 將JSON字串轉換成Python物件
+
+型別對照表
+
+| Python |  JSON  |
+|:------:|:------:|
+|  dict  | object |
+|  str   | string |
+|  int   | number(int) |
+|  float | number(real) |
+|  True  | true   |
+|  Flase | flase  |
+|  None  |  null  |
+
+使用範例
+```python=
+# 進入Python Interpreter
+import json
+
+# 基本型態
+a, b, c, d, e, f = 'Hi', 10, 1.0, True, False, None
+# dumps function
+A = json.dumps(a)
+B = json.dumps(b)
+C = json.dumps(c)
+D = json.dumps(d)
+E = json.dumps(e)
+F = json.dumps(f)
+# type A ~ F，觀察結果
+
+# loads funcion
+a1 = json.loads(A)
+b1 = json.loads(B)
+c1 = json.loads(C)
+d1 = json.loads(D)
+e1 = json.loads(E)
+f1 = json.loads(F) # 用print才看得到
+# type a1 ~ f1，觀察結果
+# 可以測試一下，a == a1 ~ f == f1，結果都會是True
+```
+:::info
+小結: 基本型態的轉換可以放心使用，沒有問題
+:::
+```python=
+# 進入Python Interpreter
+import json
+
+# 資料結構 Tuple List Dictionary
+aTuple = ('Tuple', 'will', 'change', 'toList', 99)
+aList  = ['Int', 10, 'Float', 1.0, 'String', 'hello', 'LofL', [1,2], (3,4)]
+aDict  = {9 : 99, 1.0 : 5.5, 'str' : 'string', None : None}
+# dumps function
+TD = json.dumps(aTuple)
+LD = json.dumps(aList)     
+DD = json.dumps(aDict)
+# type LD TD DD，觀察結果
+
+# loads function
+bTuple = json.loads(TD)
+bList  = json.loads(LD)
+bDict  = json.loads(DD)
+# type (a、b) pair 比較結果
+# 可以測試一下，每對pair的比較，結果都會是Flase
+```
+:::info
+小結: 資料結構的轉換必須要注意一些事情
+1. List 在轉換時只要其元素都為基本型態，是沒問題的
+2. JSON 沒有Tuple的型態，任何Tuple都會被轉成List
+3. Dictionary 的key在JSON裡面必須是字串型態，value不受影響
+:::
+
+如果一定要非字串型別當作dict key值的話，可以使用二次dump的技巧
+```python=
+def transKey(dict_data, encode=True):
+    tmp_dict = {}
+    for key, value in dict_data.items():
+        if encode:
+            tmp_dict[json.dumps(key)] = value
+        else:
+            tmp_dict[json.loads(key)] = value
+    return tmp_dict
+
+# 使用上
+aDict          =  {9 : 99, 1.0 : 5.5, None : None}
+# 先進行key轉換，在做dumps
+aDict_transKey =  transKey(aDict, encode=True)
+jDict_dump     =  json.dumps(aDict_transKey)
+# 先做loads，再將key轉回去
+jDict_load     =  json.loads(jDict_dump)
+bDict          =  transKey(jDict_load, encode=False)
+
+if aDict == bDict:
+    print('Successed!!')
+```
+Json 和檔案相關的簡單基本操作
+```python=
+# Json & File
+
+aDict = {'1' : 'one', '2' : 'two', '6' : 'six'}
+# 寫入檔案(法一)
+with open('example.json', 'w') as fp:
+    fp.write(json.dumps(aDict))
+# 寫入檔案(法二)
+json.dump(aDict, open('example.json', 'w'))
+
+# 讀出檔案(法一)
+with open('example.json', 'r') as fp:
+    data = json.loads(fp.read())
+# 讀出檔案(法二)
+data = json.load(open('example.json', 'r'))
+```
