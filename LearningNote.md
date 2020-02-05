@@ -472,15 +472,160 @@ f_obj.close()
 ## Class and Object
 ### Basic Class Prototype
 ```python=
-class ClassName:
+class ClassName(object):
     def __init__(self, args):
         # Initialize data members
-        self._protect_data   # Single underline
-        self.__private_data  # Double underline
+        self.public_data       # No     underline
+        self._protected_data   # Single underline
+        self.__private_data    # Double underline
+    def __del__(self):
+        # Destructor
+        pass
     def func(self):
         # Define member function
+        pass
     def __private_func(self):
         pass
+```
+1. Class 一般名稱開頭會大寫
+2. Class 的每個member function第一個參數一定要是self
+    - self 指的就是該類別本身
+    - 在class內部存取自己的data member都要透過self
+3. `__init__` 相當於建構元，用於初始化data member
+    - 在Python建立物件的流程，事實上是，`__new__ -> __init__`
+4. `__del__` 相當於解構元(我還沒用過)
+5. 關於`public、protected、private`
+    - Python 並沒有實作太多這樣的存取機制(protected 不常見到，一般最多就publice、private)
+    - Default 都是public
+    - 若要private，前面加雙底線
+6. `class ClassName(object):` 可以寫成 `class ClassName:`
+    - 後面繼承會談到
+
+```python=
+def getGender(self):
+    return self.gender
+
+class Person:
+    """ This is Person class description """
+    def __init__(self, name, gender, age=18):
+        self.name   = name
+        self.gender = gender
+        self.__age  = age
+    
+    # 提供我知道的一些方法
+    def showName(self):
+        print(self.name)
+    getAge = lambda self : self.__age
+    getGender = getGender
+
+Mary = Person('Mary', 'woman', 20)
+
+# Class 往下如果是一個多行註解，它會變成該class的說明文字
+# 也可以在help(Person)、help(Mary)查看該說明內容
+print(Person.__doc__, Mary.__doc__)
+# 示範使用member function
+Mary.showName()
+print(Mary.getGender(), Mary.getAge())
+# Raise AttributeError
+print(Mary.__age)        
+```
+
+### Inheritance
+
+```python=
+# Single Inheritance
+class SuperClass:
+    pass
+
+class SubClass(SuperClass):
+    def __init__(self, args)
+        # 兩種方式呼叫父類別建構元
+        super().__init__(args)
+        SuperClass.__init__(self, args)
+        
+# Multiple Inheritance
+class SubClass(Class1, Class2, ...):
+    pass
+```
+
+
+### Polymorphism
+
+### Opeartor Overloading
+![](http://1.bp.blogspot.com/-FnIuZ0OPYk8/VcJSm4w254I/AAAAAAAAIpA/Y6_3b2r53TA/s1600/operator_overloading.PNG)
+- `int()    <=> __int__(self)`
+- `float()  <=> __float__(self)`
+- `str()    <=> __str__(self)`
+- `[index]  <=> __getitem__(self, index)`
+- `in       <=> __contains__(self, other)`
+- `len      <=> __len__(self)`
+
+```python=
+# 剛好以前有作業有用到
+# Inheritance、Operator Overloading、Override
+# 暫且拿來當例子ㄅ
+# 題目為用現成的PriorityQueue實作Reverse
+import queue
+
+# 該Class用來封裝資料，目的是要使用自定義的比大小方式
+# 藉此達到Reverse
+class Wrapper():
+    def __init__(self, data):
+        self.data = data
+    getValue = lambda self : self.data
+    # >
+    def __ge__(self, other):
+        if isinstance(other, Wrapper):
+            return not self.data >= other.data
+        else:
+            raise TypeError
+    # >=
+    def __gt__(self, other):
+        if isinstance(other, Wrapper):
+            return not self.data > other.data
+        else:
+            raise TypeError
+    # <
+    def __le__(self, other):
+        if isinstance(other, Wrapper):
+            return not self.data <= other.data
+        else:
+            raise TypeError
+    # <=
+    def __lt__(self, other):
+        if isinstance(other, Wrapper):
+            return not self.data < other.data
+        else:
+            raise TypeError
+    # ==
+    def __eq__(self, other):
+        if isinstance(other, Wrapper):
+            return self.data == other.data
+        else:
+            raise TypeError
+
+# 該class繼承了現有PriorityQueue
+# 並對put、get兩個function做改寫
+# 將送進去儲存的資料用上面的class包裝起來
+class MyPriorityQueue(queue.PriorityQueue):
+    def put(self, data):
+        super().put(Wrapper(data))
+    def get(self):
+        return super().get().getValue()
+
+# 測試函式
+if __name__ == '__main__':
+    pq = MyPriorityQueue()
+    aList = [5,6,73,1,42,3,9,75]
+    
+    for e in aList:
+        pq.put(e)
+    
+    while True:
+        if not pq.empty():
+            print(pq.get(), end=' ')
+        else:
+            break
 ```
 
 ## String
