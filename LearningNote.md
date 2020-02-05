@@ -22,9 +22,13 @@ tags: python
     - Single Comment: `#後面內容為單行註解`
     - Mutiple Comment: `""" 內容為多行註解 """`
 
-5. `pass` Keyword
-    - 如同字面上的意思，當程式運行到 pass statement 時，會略過
-    - 非常常見，像是一開始規劃程式時，可以列出需要的function，但function body不能為空，此時就可以用pass略過；或是在處理Exception時，有時遇到一些例外可以略過不處理，也會用到pass
+5. Keyword
+    1. `pass`
+        - 如同字面上的意思，當程式運行到 pass statement 時，會略過
+        - 非常常見，像是一開始規劃程式時，可以列出需要的function，但function body不能為空，此時就可以用pass略過；或是在處理Exception時，有時遇到一些例外可以略過不處理，也會用到pass
+    2. `is`
+        - 用來判斷兩物件是否相等，跟`==`不同的是，`is`比較是兩物件的記憶體位址，`==`比較的是兩物件的值
+        - 為什麼要有`is`和`==`，事實上跟第三點有關，如果看到這裡還無法明白且暫時不去思考，看完整篇筆記就會知道了
 
 
 ## Control Statement
@@ -386,6 +390,27 @@ T3: 答案是沒有問題
 > 按照我的理解，list & tuple的差別應該只是
 > list is mutable
 > tuple is imutable
+
+### Inbulit Function
+1.  `abs(num)`
+    - Return the absolute value of `num`
+2.  `sum(iterable, start=0)`
+3.  `id(obj)`
+    - Return a **unique** number(not address) about the `obj`
+4.  `type(obj [, base, dict])`
+    - `type(obj)` Return the class name of the obj
+    - `type(obj, base, dict` Create a new class
+5.  `int(n) float(n)`
+6.  `oct(n) hex(n)`
+    - Return type is string
+7.  `complex(real=0, imag=0)`
+8.  `str(x) bytes(x)`
+9.  `list(iterable) tuple(iterable) dict(iterable)`
+    - 底下Inbuilt Data Structure有介紹
+10. `isinstance(obj, class | tuple)`
+    - 可以判斷obj是否為該class或是該class的子類別
+    - Return boolean
+
 
 ## I/O
 ### Simple I/O
