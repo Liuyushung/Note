@@ -655,6 +655,63 @@ if __name__ == '__main__':
 
 ## String
 
+### String Function
+> Cause string is immutable object, any function changing the string always return a new string object.
+#### 1. Test Function
+- `isalnum()`
+    - Return True, if string only contains number or alphabet
+- `isalpha()`
+    - Return True, if string only contains alphabet
+- `isdigit()`
+    - Return True, if string only contains number
+- `isspace()`
+    - Return True, if string only contains whitespace charactor
+- `isidentifier()`
+    - Return True, if string is python identifier
+- `islower()`
+    - Return True, if string is lower case
+- `isupper()`
+    - Return True, if string is upper case
+- `startswith(s)`
+    - Return True, if string starts with `'s'`
+- `endswith(s)`
+    - Return True, if string ends with `'s'`
+
+#### 2. Search Function
+- `find(s)`
+    - Return the first found index of `'s'` in the string which starts from index 0
+    - Return -1 if `'s'` is not in stirng
+- `rfind(s)`
+    - Return the first found index of `'s'` in the string which starts from last index
+    - Return -1 if `'s'` is not in stirng
+- `count(s)`
+    - Return how many times `'s'` appers in the string
+
+#### 3. Common Function
+- `lower()`
+    - Return string is lower case
+- `upper()`
+    - Return string is upper case
+- `replace(old, new)`
+    - Return string has replaced old sub_string to new sub_string
+    - EX:`str.replace('\n', '').replace('\r', '').replace('\t', '')`
+- `split(sep=None, maxsplit=-1)`
+    - Return a list of the words in the string, using sep as the delimiter string.
+    - EX:`'He ll o'.split(' ')  -->  ['He', 'll', 'o']`
+- `join(iterable)`
+    - Return a new string that inserted string between the each element in the iterable
+    - EX:`','.join(['He', 'll', 'o'])  -->  'He,ll,o'`
+
+#### 4. Format Function
+> 不熟，待補充
+兩個常用形式:
+```python=
+name, age = 'Tom', 8
+
+str1 = "I'm {}, {} years old.".format(name, age)
+str2 = f'I\'m {name}, {age} years old.'
+```
+
 ## Exception Handling
 
 ## Inbuilt Data Structure
@@ -663,7 +720,7 @@ if __name__ == '__main__':
 > List is a mutable object
 > List is like one dimension array, more like vector in C/C++
 
-#### List Functions
+#### 1. List Functions
 - `list.append(elem)`
     - Append elem to the tail of list
 - `list.extend(iterable)`
@@ -736,8 +793,9 @@ b = [x for x in a]  # Use list comprehension
 # Why don't we simply use
 b = a
 ```
+#### 2. List Slice
 
-#### List Comprehension
+#### 3. List Comprehension
 > 這招必學，學會程式碼可以非常簡短!!
 
 ##### Basic Type
@@ -784,7 +842,7 @@ nums = [ x*y for x in [1,2,3] for y in [10,20,30] ]
 # Try & Test
 ```
 
-#### List Common Usage
+#### 4. List Common Usage
 ```python=
 # Transform input to int
 nums = list(map(int, input('Input Numbers: ').split(' ')))
@@ -797,7 +855,7 @@ for elem in aList:
 size = len(aList)
 ```
 
-#### List Common Error
+#### 5. List Common Error
 ```python=
 aList = list(1, 2, 3)
 ## Raise TypeError
@@ -820,7 +878,7 @@ aList = list( range(1,4) )
 > 2. 如同C++ hash map
 > 3. key-value可以為任意型別
 
-#### Dictionary Function
+#### 1. Dictionary Function
 - `dict(mapping)`:
     - Return the dict of mapping
     - EX:`dict([('one', 1) ,('two', 2)]) -->  {'one': 1, 'two': 2}`
@@ -856,7 +914,7 @@ aList = list( range(1,4) )
      - Return True if key in the dict
      - EX:`True if key in dict else False`
 
-#### Dictionary Example
+#### 2. Dictionary Example
 ```python=
 # dict example with sorted and lambda
 dic = {'Mary' : 50, 'Bob': 30, 'Cindy' : 80, 'John' : 100, 'Can' : 10}
