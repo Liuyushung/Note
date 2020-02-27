@@ -5,7 +5,10 @@ tags: python
 [TOC]
 
 ## Fundamental Concept
-1. Python為一弱型別程式語言
+1. Python為一[強型別程式語言](https://stackoverflow.com/questions/11328920/is-python-strongly-typed)
+     
+     ![](https://i.imgur.com/b58Zw3U.png)
+
 
 2. Python的語法中沒有`{}`，因此是用縮排(indent)來判別範圍，縮排並沒有規定為多少空格，只要統一即可
 
@@ -713,11 +716,33 @@ str2 = f'I\'m {name}, {age} years old.'
 ```
 
 ## Exception Handling
-
+### Basic Type
+```python=
+# 觸發例外
+raise <ExceptionType>
+# 處裡例外
+try:
+    <body>
+except <ExceptionType1>:
+    <handler1>
+...
+except <ExceptionTypeN>:
+    <handlerN>
+except:
+    <handlerExcept>
+    # 當前面的except都無法抓到合適的型態時, 執行此區塊
+else
+    <process_else>
+    # 當try裡面沒有例外發生時, 執行此區塊
+finally:
+    <process_finally>
+    # 定義一些收拾行為, 不管有沒有發生例外, 最後都會執行此區塊
+```
 ## Inbuilt Data Structure
 ### List
 
-> List is a mutable object
+> List is a mutable object.
+
 > List is like one dimension array, more like vector in C/C++
 
 #### 1. List Functions
@@ -744,6 +769,7 @@ str2 = f'I\'m {name}, {age} years old.'
     - Raise ValueError if elem is not in the list
 - `list.sort(key=None, reverse=False)`
     - Sort the list by key
+    - In-place Sort
 - `list.copy()`
     - Return the copied list
 
@@ -793,7 +819,27 @@ b = [x for x in a]  # Use list comprehension
 # Why don't we simply use
 b = a
 ```
-#### 2. List Slice
+#### 2. List Slicing
+> List 可以一次取出不只一個元素，用的就是 Slicing
+
+##### Syntax
+```python=
+list[index1 : index2] #從index1取到index2(不包含index2)
+```
+
+##### Example
+```python=
+x = [1, 2, 3, 4]
+x[0:2]  # [1, 2]
+x[1:-1] # [2, 3], 1和倒數第一個之間的元素
+x[2:0]  # []    , 若第一個索引的位置在第二個索引的位置之前
+x[ :2]  # [1, 2], 從開頭開始切
+x[2: ]  # [3, 4], 從2開始切到尾
+x[ : ]  # [1,2,3,4], 這邊是不一樣的list只是切出所有元素
+```
+
+
+
 
 #### 3. List Comprehension
 > 這招必學，學會程式碼可以非常簡短!!
@@ -844,15 +890,20 @@ nums = [ x*y for x in [1,2,3] for y in [10,20,30] ]
 
 #### 4. List Common Usage
 ```python=
-# Transform input to int
+# 1. Transform input to int
 nums = list(map(int, input('Input Numbers: ').split(' ')))
 
-# Access elems dirtectly, not access by index
+# 2. Access elems dirtectly, not access by index
 for elem in aList:
     pass
 
-# Get list size
+# 3. Get list size
 size = len(aList)
+
+# 4. Delete element in list
+aList = ['a', 'b', 'c', 3, 4, 5]
+del aList[1]     # aList == ['a', 'c', 3, 4, 5]
+del aList[ :2]   # aList == [3, 4, 5]
 ```
 
 #### 5. List Common Error
