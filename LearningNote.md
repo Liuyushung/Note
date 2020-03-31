@@ -437,6 +437,7 @@ print(var1, var2, end='') # 預設print一次會自動接一個\n，可以透過
             - 為一絕對、相對的檔案路徑
             - 型別為字串
         - mode
+            - Default is `'r'`
             - 非必要，但一般都會填
             - 開啟檔案的模式
                 - `'r'`  : read only
@@ -1122,3 +1123,207 @@ with open('example.json', 'r') as fp:
 # 讀出檔案(法二)
 data = json.load(open('example.json', 'r'))
 ```
+
+## Third Party Module
+
+```python=
+# Download Module
+pip install <module name>
+# Update Module
+pip install -U <module name>
+```
+
+```python=
+# 下載過的模組
+pyperclip  # 剪貼簿(複製、貼上)
+openpyxl   # Excel 相關操作
+```
+
+### Module -- Pyperclip
+> library pyerclip
+
+- copy(*string*)
+    - 傳送字串到剪貼簿
+- paste()
+    - 從剪貼簿接收字串
+
+### Module -- Openpyxl
+> library openpyxl
+
+> 用來處理Excel檔案
+
+#### Excel
+- Excel 試算表文件 == 活頁簿(workbook)
+    - 儲存在.xlsx檔案中
+- 活頁簿可有多個工作表(sheet)
+    - 正在使用的工作表稱為 active sheet
+- 欄從A開始
+- 列從1開始
+
+#### Attr & Fun
+
+##### openpyxl
+- load_workbook(*file*)
+    - file 為 Excel 檔名
+    - Return: Workbook Object
+```python=
+wb = openpyxl.load_workbook('examply.xlsx')
+```
+- Workbook()
+    - 建立空的活頁簿
+    - Return: Workbook Object
+
+##### openpyxl.utils
+- get_column_letter
+    - 將數字轉成欄位代碼
+```python=
+openpyxl.utils.get_column_letter(27) #AA
+```
+- column_index_from_string
+    - 將欄位代碼轉成數字
+```python=
+openpyxl.utils.column_index_from_string('AA') # 27
+```
+
+##### openpyxl.styles
+- Font(*name, size, bold, italic*)
+    - 可以自訂儲存格字型別樣式
+    - name : 字型名稱, `string`
+    - size : 字型大小, `int`
+    - bold : 粗體, `bool`
+    - italic : 斜體, `bool`
+```python=
+from openpyxl.styles import Font
+f1 = Font(name='Console', size=12, bold=true, italic=true)
+<cell>.font = f1
+```
+
+##### workbook
+- active
+    - 取得 active sheet
+    - Return: Worksheet Object
+- worksheets
+    - 取得所有 sheets
+    - Return: List
+- encoding
+    - 取得編碼
+    - Return: String
+- get_sheet_by_name(*sheet name*)
+    - 取得指定 sheet
+    - Return: Worksheet Object
+- get_sheet_names()
+    - 回傳所有的sheet
+    - Return: List
+- create_sheet(*index=, title=*)
+    - 建立分頁，預設加在最後，可以指定index
+- remove_sheet(*Sheet Objet*)
+    - 刪除指定的分頁
+- save(*excel name*)
+    - 儲存成Excel檔
+
+    
+##### Worksheet
+- title
+    - 取得 sheet name
+- max_row
+    - 取得工作表列的最大值
+- max_column
+    - 取得工作表行的最大值
+- freeze_panes
+    - 設定凍結窗格(不管捲到哪，都會顯示在最上層)
+    - 需要注意的是，凍結的範圍是**小於給定的值**
+        - A1 -> 沒有凍結
+            - 等同於`None`
+        - B2 -> 凍結欄A、列1
+        - C1 -> 凍結欄A、欄B
+```python=
+ws.freeze_panes = 'A2'
+```
+- row_dimensions[*row*].[height | width]
+    - 設定指定列的高度或寬度
+```python=
+ws.row_dimensions[1].height = 50
+```
+- column_dimensions[*row*].[height | width]
+    - 設定指定行的高度或寬度
+```python=
+ws.column_dimensions['B'].width = 15
+```
+- cell(*row=i, column=j*)
+    - 取得i列j行的儲存格
+    - Return: Cell Object
+```python=
+# 另外一種取法
+sheet['A1'].value
+```
+- merge_cells(*range*)
+    - 合併儲存格
+```python=
+ws.merge_cells('A1:D3')  # merge 12 cells
+```
+- unmerge_cells(*range*)
+    - 取消合併儲存格
+```python=
+ws.unmerge_cells('A1:D3')  # merge 12 cells
+```
+
+##### cell
+- value
+    - 取得值或修改值
+- row
+    - 取得該cell位於哪一列
+- column
+    - 取得該cell位於哪一行
+- coordination
+    - 取得該cell位置(EX: A1、B2)
+
+##### Sheet Slice
+```python=
+import openpyxl
+
+wb = openpyxl.load_workbook('example.xlsx')
+st = wb.get_sheet_by_name('Sheet1')
+
+for row in sheet['A1':'C3']:
+    for cell in row:
+        print(cell.coordinate, cell.value)
+```
+
+##### Formula
+> Excel中公式是由=開頭
+```python=
+import openpyxl
+wb = openpyxl.Workbook()
+ws = wb.actice
+ws['A1'], ws['A2'] = 100, 200
+ws['A3'] = '=SUM(A1:A2)'
+wb.save('formula.xslx')
+```
+
+##### Example
+###### Chart
+```python=
+import openpyxl
+wb = openpyxl.Workbook()
+ws = wb.active
+# Create simple data in cell
+for i in range(1,11):
+    ws['A'+str(i)] = i
+# Create Reference Object
+ref = openpyxl.chart.Reference(ws, min_col=1, min_row=1, max_col=1, max_row=10)
+# Create Series Object
+series = openxl.chart.Series(ref, title='First series')
+
+chart = openpyxl.chart.BarChart()  # 直方圖
+chart.title = '直方圖'
+chart.append(series)  # 將序列資料加到圖表中
+ws.add_chart(chart, 'C5')  # 將圖表加到分頁中指定的位置
+wb.save('sammpleChart.xlsx')
+```
+:::danger
+雖然openpyxl可以製作圖表，但在讀取Excel時，無法讀取圖表
+:::
+- 其他可畫的圖表
+    - openpyxl.chart.LineChart(), 折線圖
+    - openpyxl.chart.ScatterChart(), 散佈圖
+    - openpyxl.chart.PieChart(), 圓餅圖
