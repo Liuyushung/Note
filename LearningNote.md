@@ -716,8 +716,8 @@ str1 = "I'm {}, {} years old.".format(name, age)
 str2 = f'I\'m {name}, {age} years old.'
 ```
 
-## Exception Handling
-### Basic Type
+## Debugging
+### Exception Handling
 ```python=
 # 觸發例外
 raise <ExceptionType>
@@ -734,11 +734,73 @@ except:
     # 當前面的except都無法抓到合適的型態時, 執行此區塊
 else
     <process_else>
-    # 當try裡面沒有例外發生時, 執行此區塊
+    # Optional, 當try裡面沒有例外發生時, 執行此區塊
 finally:
     <process_finally>
-    # 定義一些收拾行為, 不管有沒有發生例外, 最後都會執行此區塊
+    # Optional, 定義一些收拾行為, 不管有沒有發生例外, 最後都會執行此區塊
 ```
+#### Traceback Information
+> 程式只要發生例外沒有處理，就會顯示Traceback資訊，根據call stack依序顯示錯誤訊息
+```python=
+def fun1():
+    return fun2()
+def fun2():
+    return fun3()
+def fun3():
+    raise Exception('This is error message.')
+
+if __name__ == '__main__':
+    fun1()
+```
+```python=
+# 執行程式後
+Traceback (most recent call last):
+    File "error.py", line 11, in <module>
+        fun1()
+    File "error.py", line 2, in fun1
+        return fun2()
+    File "error.py", line 5, in fun2
+        return fun3()
+    File "error.py", line 8, in fun3
+        raise Exception('This is error message.')
+Exception: This is error message. 
+
+# 越早呼叫的function會在最上層
+# 最後則是發生例外的型別與錯誤訊息
+```
+```python=
+# 將錯誤訊息存城日誌檔，使用traceback module
+import traceback
+try:
+    raise Exception('This is error message.')
+except:
+    error_file = open('errorInfo.txt', 'w')
+    error_file.write(traceback.format_exc())
+    error_file.close()
+    print('The traceback info was written to errorInfo.txt')
+```
+[Traceback Module](https://docs.python.org/3/library/traceback.html)
+
+### Assertion
+> assert <condition>, <message>
+
+- 使用`assert`檢查是否發生錯誤，這樣的寫法程式可讀性也比較好
+- 當`condition`為`Flase`，產生`AssertionError`，顯示`message`
+- 執行python時加上 -O 可以停用 Assertion
+
+```python=
+def divide(n, d):
+    assert d > 0, "分母不能為零"
+    return n/d
+
+if __name__ == '__main__':
+    divide(1,0)
+```
+
+### Logging Module
+[logging module](https://docs.python.org/3/library/logging.html)
+
+
 ## Inbuilt Data Structure
 ### List
 
