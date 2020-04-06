@@ -1186,6 +1186,53 @@ with open('example.json', 'r') as fp:
 data = json.load(open('example.json', 'r'))
 ```
 
+## Module - CSV
+> Library: csv
+
+### CSV File
+1. 值只有字串型別
+2. 字型無法設定
+3. 只有單一工作表
+4. 不能指定儲存格寬度和高度
+5. 不能合併儲存格
+6. 不能嵌入圖片或圖表
+
+### CSV Function
+- reader(*iterable*)
+    - iterable: 元素為字串即可，一般會是`file object`
+    - Return: iterator(reader object)
+        - 每次迭代(iteration)產出一列
+```python=
+import csv
+fp = open('example.csv', 'r') #以純文字開啟
+data = csv.reader(fp)
+# Get Value
+for row in data:
+    for cell in row:
+        pass
+# OR
+data = list(csv.reader(fp)
+# 可使用
+cell = data[row][col]
+```
+- writer(*file object, delimiter=, lineterminator=*)
+    - file object: 以`w`開啟，需要設定`newline=''`，否則行距會是兩倍大
+    - delimiter: 設定分隔符號，預設是逗點
+    - lineterminator: 設定行尾終止於號，預設是`'\n'`
+    - Return: Writer Object
+```python=
+import csv
+fp = open('out.csv', 'w', newline='')
+out_writer = csv.writer(fp)
+out_writer.writerow([1, 2, 'Hello'])
+out_writer.close()
+```
+
+### Reader Object
+- line_num
+    - 取得列號
+
+
 ## Third Party Module
 
 ```python=
